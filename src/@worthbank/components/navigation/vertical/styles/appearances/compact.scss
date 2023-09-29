@@ -1,0 +1,112 @@
+/* Variables */
+:root {
+    --worthbank-vertical-navigation-compact-width: 112px;
+}
+
+worthbank-vertical-navigation {
+
+    /* Compact appearance overrides */
+    &.worthbank-vertical-navigation-appearance-compact {
+        width: var(--worthbank-vertical-navigation-compact-width);
+        min-width: var(--worthbank-vertical-navigation-compact-width);
+        max-width: var(--worthbank-vertical-navigation-compact-width);
+
+        /* Left positioned */
+        &.worthbank-vertical-navigation-position-left {
+
+            /* Side mode */
+            &.worthbank-vertical-navigation-mode-side {
+                margin-left: calc(var(--worthbank-vertical-navigation-compact-width) * -1);
+            }
+
+            /* Opened */
+            &.worthbank-vertical-navigation-opened {
+                margin-left: 0;
+            }
+        }
+
+        /* Right positioned */
+        &.worthbank-vertical-navigation-position-right {
+
+            /* Side mode */
+            &.worthbank-vertical-navigation-mode-side {
+                margin-right: calc(var(--worthbank-vertical-navigation-compact-width) * -1);
+            }
+
+            /* Opened */
+            &.worthbank-vertical-navigation-opened {
+                margin-right: 0;
+            }
+
+            /* Aside wrapper */
+            .worthbank-vertical-navigation-aside-wrapper {
+                left: auto;
+                right: var(--worthbank-vertical-navigation-compact-width);
+            }
+        }
+
+        /* Wrapper */
+        .worthbank-vertical-navigation-wrapper {
+
+            /* Content */
+            .worthbank-vertical-navigation-content {
+
+                > worthbank-vertical-navigation-aside-item,
+                > worthbank-vertical-navigation-basic-item {
+
+                    .worthbank-vertical-navigation-item-wrapper {
+                        margin: 4px 8px 0 8px;
+
+                        .worthbank-vertical-navigation-item {
+                            flex-direction: column;
+                            justify-content: center;
+                            padding: 12px;
+                            border-radius: 6px;
+
+                            .worthbank-vertical-navigation-item-icon {
+                                margin-right: 0;
+                            }
+
+                            .worthbank-vertical-navigation-item-title-wrapper {
+                                margin-top: 8px;
+
+                                .worthbank-vertical-navigation-item-title {
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                    text-align: center;
+                                    line-height: 16px;
+                                }
+
+                                .worthbank-vertical-navigation-item-subtitle {
+                                    display: none !important;
+                                }
+                            }
+
+                            .worthbank-vertical-navigation-item-badge {
+                                position: absolute;
+                                top: 12px;
+                                left: 64px;
+                            }
+                        }
+                    }
+
+                    > worthbank-vertical-navigation-collapsable-item {
+                        display: none
+                    }
+
+                    > worthbank-vertical-navigation-group-item {
+
+                        > .worthbank-vertical-navigation-item-wrapper {
+                            display: none
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Aside wrapper */
+        .worthbank-vertical-navigation-aside-wrapper {
+            left: var(--worthbank-vertical-navigation-compact-width);
+        }
+    }
+}

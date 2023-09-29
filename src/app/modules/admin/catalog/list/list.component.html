@@ -1,0 +1,151 @@
+<div
+    class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto"
+    cdkScrollable>
+
+    <!-- Header -->
+    <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-gray-800 dark">
+        <!-- Background - @formatter:off -->
+        <!-- Rings -->
+        <svg class="absolute inset-0 pointer-events-none"
+             viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- @formatter:on -->
+        <div class="z-10 relative flex flex-col items-center">
+            <h2 class="text-xl font-semibold">WORTH BANK</h2>
+            <div class="mt-1 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight text-center">
+                Explora nuestra amplia gama de autos
+            </div>
+            <div class="max-w-2xl mt-6 sm:text-2xl text-center tracking-tight text-secondary">
+                Descubre una selección excepcional de autos de alta calidad que se adaptan a tus necesidades y preferencias.
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto p-6 sm:p-10">
+        <div class="flex flex-col flex-auto w-full max-w-xs sm:max-w-5xl mx-auto">
+            <!-- Filters -->
+            <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none">
+                <mat-form-field
+                    class="w-full sm:w-36"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-select
+                        [value]="'all'"
+                        (selectionChange)="filterByBrand($event)">
+                        <mat-option [value]="'all'">Todos</mat-option>
+                        <ng-container *ngFor="let brand of brands; trackBy: trackByFn">
+                            <mat-option [value]="brand.badge">{{brand.name}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                    class="w-full sm:w-72 mt-4 sm:mt-0 sm:ml-4"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-icon
+                        matPrefix
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input
+                        (input)="filterByQuery(query.value)"
+                        placeholder="Buscar auto"
+                        matInput
+                        #query>
+                </mat-form-field>
+                <mat-slide-toggle
+                        class="mt-8 sm:mt-0 sm:ml-auto"
+                        [color]="'primary'"
+                        (change)="toggleAvailable($event)">
+                        Solo disponibles
+                </mat-slide-toggle>
+            </div>
+            <!-- Cars -->
+            <ng-container *ngIf="this.filteredCars.length; else noCars">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 sm:mt-10">
+                    <ng-container *ngFor="let car of filteredCars; trackBy: trackByFn">
+                        <!-- Car -->
+                        <div class="flex flex-col h-auto shadow rounded-2xl overflow-hidden bg-card">
+                            <div class="flex flex-col p-6">
+                                <div class="flex items-center justify-between">
+                                    <!-- Car Brand -->
+                                    <ng-container *ngIf="(car.brand | worthbankFindByKey:'badge':brands) as brand">
+                                        <div
+                                            class="py-0.5 px-3 rounded-full text-sm font-semibold"
+                                            [ngClass]="{'text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500': brand.badge === 'bmw',
+                                                        'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500': brand.badge === 'toyota',
+                                                        'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500': brand.badge === 'hyundai',
+                                                        'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500': brand.badge === 'kia'}">
+                                            {{brand.name}}
+                                        </div>
+                                    </ng-container>
+                                    <!-- Mileage or condition -->
+                                    <div class="flex items-center">
+                                        <ng-container *ngIf="car.mileage === 0">
+                                            <mat-icon
+                                                class="icon-size-5 text-green-600"
+                                                [svgIcon]="'heroicons_solid:badge-check'"
+                                                [matTooltip]="'Nuevo'"></mat-icon>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <!-- Car model & description -->
+                                <div class="mt-4 text-lg font-medium">{{car.model}}</div>
+                                <div class="mt-0.5 line-clamp-2 text-secondary">{{car.description}}</div>
+                                <div class="mt-0.5 line-clamp-2 text-secondary">Año: {{car.year}}</div>
+
+                                <div class="w-12 h-1 my-6 border-t-2"></div>
+                                <worthbank-card class="flex flex-col max-w-80 w-full">
+                                    <img
+                                        class="object-cover"
+                                        [src]="car.image"
+                                        [alt]="car.model">
+                                </worthbank-card>
+                            </div>
+                            <!-- Footer -->
+                            <div class="flex flex-col w-full mt-auto">
+                                <!-- Sell car button -->
+                                <div class="px-6 py-4 text-right bg-gray-50 dark:bg-transparent">
+                                    <a
+                                        mat-stroked-button
+                                        [disabled]="!car.available"
+                                        [routerLink]="[car.id]">
+                                        <span class="inline-flex items-center">
+
+                                            <!-- Available -->
+                                            <ng-container *ngIf="car.available === true">
+                                                <span>Vender</span>
+                                            </ng-container>
+                                            <!-- Not available -->
+                                            <ng-container *ngIf="car.available === false">
+                                                <span>No disponible</span>
+                                            </ng-container>
+
+                                            <mat-icon
+                                                class="ml-1.5 icon-size-5"
+                                                [svgIcon]="'heroicons_solid:arrow-sm-right'"></mat-icon>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+
+            <!-- No Cars -->
+            <ng-template #noCars>
+                <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+                    <mat-icon
+                        class="icon-size-24"
+                        [svgIcon]="'heroicons_outline:document-search'"></mat-icon>
+                    <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">No se encontraron autos</div>
+                </div>
+            </ng-template>
+        </div>
+
+    </div>
+
+</div>

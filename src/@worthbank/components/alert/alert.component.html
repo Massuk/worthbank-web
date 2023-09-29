@@ -1,0 +1,82 @@
+<div
+    class="worthbank-alert-container"
+    *ngIf="!dismissible || dismissible && !dismissed"
+    [@fadeIn]="!dismissed"
+    [@fadeOut]="!dismissed">
+
+    <!-- Border -->
+    <div
+        class="worthbank-alert-border"
+        *ngIf="appearance === 'border'"></div>
+
+    <!-- Icon -->
+    <div
+        class="worthbank-alert-icon"
+        *ngIf="showIcon">
+
+        <!-- Custom icon -->
+        <div class="worthbank-alert-custom-icon">
+            <ng-content select="[worthbankAlertIcon]"></ng-content>
+        </div>
+
+        <!-- Default icons -->
+        <div class="worthbank-alert-default-icon">
+
+            <mat-icon
+                *ngIf="type === 'primary'"
+                [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+
+            <mat-icon
+                *ngIf="type === 'accent'"
+                [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+
+            <mat-icon
+                *ngIf="type === 'warn'"
+                [svgIcon]="'heroicons_solid:x-circle'"></mat-icon>
+
+            <mat-icon
+                *ngIf="type === 'basic'"
+                [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+
+            <mat-icon
+                *ngIf="type === 'info'"
+                [svgIcon]="'heroicons_solid:information-circle'"></mat-icon>
+
+            <mat-icon
+                *ngIf="type === 'success'"
+                [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+
+            <mat-icon
+                *ngIf="type === 'warning'"
+                [svgIcon]="'heroicons_solid:exclamation'"></mat-icon>
+
+            <mat-icon
+                *ngIf="type === 'error'"
+                [svgIcon]="'heroicons_solid:x-circle'"></mat-icon>
+
+        </div>
+
+    </div>
+
+    <!-- Content -->
+    <div class="worthbank-alert-content">
+
+        <div class="worthbank-alert-title">
+            <ng-content select="[worthbankAlertTitle]"></ng-content>
+        </div>
+
+        <div class="worthbank-alert-message">
+            <ng-content></ng-content>
+        </div>
+
+    </div>
+
+    <!-- Dismiss button -->
+    <button
+        class="worthbank-alert-dismiss-button"
+        mat-icon-button
+        (click)="dismiss()">
+        <mat-icon [svgIcon]="'heroicons_solid:x'"></mat-icon>
+    </button>
+
+</div>

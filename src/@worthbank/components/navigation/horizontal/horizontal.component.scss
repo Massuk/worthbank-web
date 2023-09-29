@@ -1,0 +1,180 @@
+/* Root navigation specific */
+worthbank-horizontal-navigation {
+
+    .worthbank-horizontal-navigation-wrapper {
+        display: flex;
+        align-items: center;
+
+        /* Basic, Branch */
+        worthbank-horizontal-navigation-basic-item,
+        worthbank-horizontal-navigation-branch-item {
+
+            @screen sm {
+
+                &:hover {
+
+                    .worthbank-horizontal-navigation-item-wrapper {
+                        @apply bg-hover;
+                    }
+                }
+            }
+
+            .worthbank-horizontal-navigation-item-wrapper {
+                border-radius: 4px;
+                overflow: hidden;
+
+                .worthbank-horizontal-navigation-item {
+                    padding: 0 16px;
+                    cursor: pointer;
+                    user-select: none;
+
+                    .worthbank-horizontal-navigation-item-icon {
+                        margin-right: 12px;
+                    }
+                }
+            }
+        }
+
+        /* Basic - When item active (current link) */
+        worthbank-horizontal-navigation-basic-item {
+
+            .worthbank-horizontal-navigation-item-active,
+            .worthbank-horizontal-navigation-item-active-forced {
+
+                .worthbank-horizontal-navigation-item-title {
+                    @apply text-primary #{'!important'};
+                }
+
+                .worthbank-horizontal-navigation-item-subtitle {
+                    @apply text-primary-400 #{'!important'};
+
+                    .dark & {
+                        @apply text-primary-600 #{'!important'};
+                    }
+                }
+
+                .worthbank-horizontal-navigation-item-icon {
+                    @apply text-primary #{'!important'};
+                }
+            }
+        }
+
+        /* Branch - When menu open */
+        worthbank-horizontal-navigation-branch-item {
+
+            .worthbank-horizontal-navigation-menu-active,
+            .worthbank-horizontal-navigation-menu-active-forced {
+
+                .worthbank-horizontal-navigation-item-wrapper {
+                    @apply bg-hover;
+                }
+            }
+        }
+
+        /* Spacer */
+        worthbank-horizontal-navigation-spacer-item {
+            margin: 12px 0;
+        }
+    }
+}
+
+/* Menu panel specific */
+.worthbank-horizontal-navigation-menu-panel {
+
+    .worthbank-horizontal-navigation-menu-item {
+        height: auto;
+        min-height: 0;
+        line-height: normal;
+        white-space: normal;
+
+        /* Basic, Branch */
+        worthbank-horizontal-navigation-basic-item,
+        worthbank-horizontal-navigation-branch-item,
+        worthbank-horizontal-navigation-divider-item {
+            display: flex;
+            flex: 1 1 auto;
+        }
+
+        /* Divider */
+        worthbank-horizontal-navigation-divider-item {
+            margin: 8px -16px;
+
+            .worthbank-horizontal-navigation-item-wrapper {
+                height: 1px;
+                box-shadow: 0 1px 0 0;
+            }
+        }
+    }
+}
+
+/* Navigation menu item common */
+.worthbank-horizontal-navigation-menu-item {
+
+    /* Basic - When item active (current link) */
+    worthbank-horizontal-navigation-basic-item {
+
+        .worthbank-horizontal-navigation-item-active,
+        .worthbank-horizontal-navigation-item-active-forced {
+
+            .worthbank-horizontal-navigation-item-title {
+                @apply text-primary #{'!important'};
+            }
+
+            .worthbank-horizontal-navigation-item-subtitle {
+                @apply text-primary-400 #{'!important'};
+
+                .dark & {
+                    @apply text-primary-600 #{'!important'};
+                }
+            }
+
+            .worthbank-horizontal-navigation-item-icon {
+                @apply text-primary #{'!important'};
+            }
+        }
+    }
+
+    .worthbank-horizontal-navigation-item-wrapper {
+        width: 100%;
+
+        &.worthbank-horizontal-navigation-item-has-subtitle {
+
+            .worthbank-horizontal-navigation-item {
+                min-height: 56px;
+            }
+        }
+
+        .worthbank-horizontal-navigation-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 48px;
+            width: 100%;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+
+            .worthbank-horizontal-navigation-item-title-wrapper {
+
+                .worthbank-horizontal-navigation-item-subtitle {
+                    font-size: 12px;
+                }
+            }
+
+            .worthbank-horizontal-navigation-item-badge {
+                margin-left: auto;
+
+                .worthbank-horizontal-navigation-item-badge-content {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 10px;
+                    font-weight: 600;
+                    white-space: nowrap;
+                    height: 20px;
+                }
+            }
+        }
+    }
+}

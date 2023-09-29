@@ -1,0 +1,99 @@
+/* Variables */
+:root {
+    --worthbank-vertical-navigation-thin-width: 80px;
+}
+
+worthbank-vertical-navigation {
+
+    /* Thin appearance overrides */
+    &.worthbank-vertical-navigation-appearance-thin {
+        width: var(--worthbank-vertical-navigation-thin-width);
+        min-width: var(--worthbank-vertical-navigation-thin-width);
+        max-width: var(--worthbank-vertical-navigation-thin-width);
+
+        /* Left positioned */
+        &.worthbank-vertical-navigation-position-left {
+
+            &.worthbank-vertical-navigation-mode-side {
+                margin-left: calc(var(--worthbank-vertical-navigation-thin-width) * -1);
+            }
+
+            &.worthbank-vertical-navigation-opened {
+                margin-left: 0;
+            }
+        }
+
+        /* Right positioned */
+        &.worthbank-vertical-navigation-position-right {
+
+            &.worthbank-vertical-navigation-mode-side {
+                margin-right: calc(var(--worthbank-vertical-navigation-thin-width) * -1);
+            }
+
+            &.worthbank-vertical-navigation-opened {
+                margin-right: 0;
+            }
+
+            .worthbank-vertical-navigation-aside-wrapper {
+                left: auto;
+                right: var(--worthbank-vertical-navigation-thin-width);
+            }
+        }
+
+        /* Wrapper */
+        .worthbank-vertical-navigation-wrapper {
+
+            /* Content */
+            .worthbank-vertical-navigation-content {
+
+                > worthbank-vertical-navigation-aside-item,
+                > worthbank-vertical-navigation-basic-item {
+                    flex-direction: column;
+                    justify-content: center;
+                    height: 64px;
+                    min-height: 64px;
+                    max-height: 64px;
+                    padding: 0 16px;
+
+                    .worthbank-vertical-navigation-item-wrapper {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        .worthbank-vertical-navigation-item {
+                            justify-content: center;
+                            padding: 12px;
+                            border-radius: 4px;
+
+                            .worthbank-vertical-navigation-item-icon {
+                                margin: 0;
+                            }
+
+                            .worthbank-vertical-navigation-item-arrow,
+                            .worthbank-vertical-navigation-item-badge-content,
+                            .worthbank-vertical-navigation-item-title-wrapper {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+
+                > worthbank-vertical-navigation-collapsable-item {
+                    display: none
+                }
+
+                > worthbank-vertical-navigation-group-item {
+
+                    > .worthbank-vertical-navigation-item-wrapper {
+                        display: none
+                    }
+                }
+            }
+        }
+
+        /* Aside wrapper */
+        .worthbank-vertical-navigation-aside-wrapper {
+            left: var(--worthbank-vertical-navigation-thin-width);
+        }
+    }
+}
