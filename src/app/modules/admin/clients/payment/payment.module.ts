@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { PaymentComponent } from 'app/modules/admin/clients/payment/payment.component';
 import { paymentRoutes } from 'app/modules/admin/clients/payment/payment.routing';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
     declarations: [
@@ -10,7 +11,8 @@ import { paymentRoutes } from 'app/modules/admin/clients/payment/payment.routing
     ],
     imports     : [
         RouterModule.forChild(paymentRoutes),
-        CdkScrollableModule
+        CdkScrollableModule,
+        MatTableModule
     ]
 })
 export class PaymentModule

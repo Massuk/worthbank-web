@@ -11,9 +11,17 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import { DatePipe } from '@angular/common';
+
+registerLocaleData(localeEs);
 
 const routerConfig: ExtraOptions = {
-    preloadingStrategy       : PreloadAllModules,
+    preloadingStrategy: PreloadAllModules,
     scrollPositionRestoration: 'enabled'
 };
 
@@ -21,7 +29,7 @@ const routerConfig: ExtraOptions = {
     declarations: [
         AppComponent
     ],
-    imports     : [
+    imports: [
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
@@ -37,10 +45,14 @@ const routerConfig: ExtraOptions = {
         // Layout module of your application
         LayoutModule
     ],
-    bootstrap   : [
+    bootstrap: [
         AppComponent
+    ],
+    providers: [
+        { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, // Configura el idioma para los componentes de Angular Material
+        { provide: LOCALE_ID, useValue: 'es' }, // Configura el idioma globalmente
+        DatePipe,
     ]
 })
-export class AppModule
-{
+export class AppModule {
 }

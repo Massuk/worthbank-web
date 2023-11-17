@@ -7,16 +7,14 @@ import { clients as clientsData, countries as countriesData } from 'app/mock-api
 @Injectable({
     providedIn: 'root'
 })
-export class ClientsMockApi
-{
+export class ClientsMockApi {
     private _clients: any[] = clientsData;
     private _countries: any[] = countriesData;
 
     /**
      * Constructor
      */
-    constructor(private _worthbankMockApiService: WorthBankMockApiService)
-    {
+    constructor(private _worthbankMockApiService: WorthBankMockApiService) {
         // Register Mock API handlers
         this.registerHandlers();
     }
@@ -28,8 +26,7 @@ export class ClientsMockApi
     /**
      * Register Mock API handlers
      */
-    registerHandlers(): void
-    {
+    registerHandlers(): void {
         // -----------------------------------------------------------------------------------------------------
         // @ Clients - GET
         // -----------------------------------------------------------------------------------------------------
@@ -52,7 +49,7 @@ export class ClientsMockApi
         // -----------------------------------------------------------------------------------------------------
         this._worthbankMockApiService
             .onGet('api/apps/clients/search')
-            .reply(({request}) => {
+            .reply(({ request }) => {
 
                 // Get the search query
                 const query = request.params.get('query');
@@ -61,8 +58,7 @@ export class ClientsMockApi
                 let clients = cloneDeep(this._clients);
 
                 // If the query exists...
-                if ( query )
-                {
+                if (query) {
                     // Filter the clients
                     clients = clients.filter(client => client.name && client.name.toLowerCase().includes(query.toLowerCase()));
                 }
@@ -79,7 +75,7 @@ export class ClientsMockApi
         // -----------------------------------------------------------------------------------------------------
         this._worthbankMockApiService
             .onGet('api/apps/clients/client')
-            .reply(({request}) => {
+            .reply(({ request }) => {
 
                 // Get the id from the params
                 const id = request.params.get('id');
@@ -103,20 +99,17 @@ export class ClientsMockApi
 
                 // Generate a new client
                 const newClient = {
-                    id          : WorthBankMockApiUtils.guid(),
-                    avatar      : null,
-                    background  : 'assets/images/cards/14-640x480.jpg',
-                    name        : 'Nuevo cliente',
-                    emails      : [],
+                    id: WorthBankMockApiUtils.guid(),
+                    avatar: null,
+                    background: 'assets/images/cards/14-640x480.jpg',
+                    name: 'Nuevo cliente',
+                    email: '',
                     phoneNumbers: [],
-                    job         : {
-                        title  : '',
-                        company: ''
-                    },
-                    birthday    : null,
-                    address     : null,
-                    notes       : null,
-                    tags        : []
+                    title: '',
+                    company: '',
+                    birthday: null,
+                    address: null,
+                    notes: null,
                 };
 
                 // Unshift the new client
@@ -131,7 +124,7 @@ export class ClientsMockApi
         // -----------------------------------------------------------------------------------------------------
         this._worthbankMockApiService
             .onPatch('api/apps/clients/client')
-            .reply(({request}) => {
+            .reply(({ request }) => {
 
                 // Get the id and client
                 const id = request.body.id;
@@ -143,8 +136,7 @@ export class ClientsMockApi
                 // Find the client and update it
                 this._clients.forEach((item, index, clients) => {
 
-                    if ( item.id === id )
-                    {
+                    if (item.id === id) {
                         // Update the client
                         clients[index] = assign({}, clients[index], client);
 
@@ -162,7 +154,7 @@ export class ClientsMockApi
         // -----------------------------------------------------------------------------------------------------
         this._worthbankMockApiService
             .onDelete('api/apps/clients/client')
-            .reply(({request}) => {
+            .reply(({ request }) => {
 
                 // Get the id
                 const id = request.params.get('id');
@@ -170,8 +162,7 @@ export class ClientsMockApi
                 // Find the client and delete it
                 this._clients.forEach((item, index) => {
 
-                    if ( item.id === id )
-                    {
+                    if (item.id === id) {
                         this._clients.splice(index, 1);
                     }
                 });
@@ -217,11 +208,11 @@ export class ClientsMockApi
                 // Read the file as the
                 reader.readAsDataURL(file);
             })
-        ;
+            ;
 
         this._worthbankMockApiService
             .onPost('api/apps/clients/avatar')
-            .reply(({request}) => {
+            .reply(({ request }) => {
 
                 // Get the id and avatar
                 const id = request.body.id;
@@ -242,8 +233,7 @@ export class ClientsMockApi
                         // Find the client and update it
                         this._clients.forEach((item, index, clients) => {
 
-                            if ( item.id === id )
-                            {
+                            if (item.id === id) {
                                 // Update the avatar
                                 clients[index].avatar = path;
 

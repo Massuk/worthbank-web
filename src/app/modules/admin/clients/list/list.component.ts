@@ -7,6 +7,7 @@ import { filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rx
 import { WorthBankMediaWatcherService } from '@worthbank/services/media-watcher';
 import { Client, Country } from 'app/modules/admin/clients/clients.types';
 import { ClientsService } from 'app/modules/admin/clients/clients.service';
+import { ClientCommunicationService } from '../shared.service';
 
 @Component({
     selector       : 'clients-list',
@@ -19,7 +20,6 @@ export class ClientsListComponent implements OnInit, OnDestroy
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
 
     clients$: Observable<Client[]>;
-
     clientsCount: number = 0;
     clientsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
     countries: Country[];
@@ -37,7 +37,8 @@ export class ClientsListComponent implements OnInit, OnDestroy
         private _clientsService: ClientsService,
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
-        private _worthbankMediaWatcherService: WorthBankMediaWatcherService
+        private _worthbankMediaWatcherService: WorthBankMediaWatcherService,
+        private _clientCommunicationService: ClientCommunicationService,
     )
     {
     }
@@ -182,8 +183,8 @@ export class ClientsListComponent implements OnInit, OnDestroy
             // Go to the new client
             this._router.navigate(['./', newClient.id], {relativeTo: this._activatedRoute});
 
-            // Mark for check
             this._changeDetectorRef.markForCheck();
+
         });
     }
 

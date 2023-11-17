@@ -8,15 +8,15 @@ import { WorthBankConfirmationService } from '@worthbank/services/confirmation';
 import { Client, Country } from 'app/modules/admin/clients/clients.types';
 import { ClientsListComponent } from 'app/modules/admin/clients/list/list.component';
 import { ClientsService } from 'app/modules/admin/clients/clients.service';
+import { ClientCommunicationService } from '../shared.service';
 
 @Component({
-    selector       : 'clients-details',
-    templateUrl    : './details.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    selector: 'clients-details',
+    templateUrl: './details.component.html',
+    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientsDetailsComponent implements OnInit, OnDestroy
-{
+export class ClientsDetailsComponent implements OnInit, OnDestroy {
     @ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
 
     editMode: boolean = false;
@@ -40,9 +40,10 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
         private _renderer2: Renderer2,
         private _router: Router,
         private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
-    )
-    {
+        private _eR: ElementRef,
+        private _viewContainerRef: ViewContainerRef,
+        private _clientCommunicationService: ClientCommunicationService
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -52,24 +53,22 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         // Open the drawer
         this._clientsListComponent.matDrawer.open();
 
         // Create the client form
         this.clientForm = this._formBuilder.group({
-            id          : [''],
-            avatar      : [null],
-            name        : ['', [Validators.required]],
-            email       : ['', [Validators.required]],
+            id: [''],
+            avatar: [null],
+            name: ['', [Validators.required]],
+            email: ['', [Validators.required]],
             phoneNumbers: this._formBuilder.array([]),
-            title       : [''],
-            company     : [''],
-            birthday    : [null],
-            address     : [null],
-            notes       : [null],
-            tags        : [[]]
+            title: [''],
+            company: [''],
+            birthday: [null],
+            address: [null],
+            notes: [null],
         });
 
         // Get the clients
@@ -102,28 +101,25 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
                 // Setup the phone numbers form array
                 const phoneNumbersFormGroups = [];
 
-                if ( client.phoneNumbers.length > 0 )
-                {
+                if (client.phoneNumbers.length > 0) {
                     // Iterate through them
                     client.phoneNumbers.forEach((phoneNumber) => {
 
                         // Create an email form group
                         phoneNumbersFormGroups.push(
                             this._formBuilder.group({
-                                country    : [phoneNumber.country],
+                                country: [phoneNumber.country],
                                 phoneNumber: [phoneNumber.phoneNumber]
                             })
                         );
                     });
                 }
-                else
-                {
+                else {
                     // Create a phone number form group
                     phoneNumbersFormGroups.push(
                         this._formBuilder.group({
-                            country    : ['us'],
+                            country: ['pe'],
                             phoneNumber: [''],
-                            label      : ['']
                         })
                     );
                 }
@@ -154,15 +150,13 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
 
         // Dispose the overlays if they are still on the DOM
-        if ( this._tagsPanelOverlayRef )
-        {
+        if (this._tagsPanelOverlayRef) {
             this._tagsPanelOverlayRef.dispose();
         }
     }
@@ -174,8 +168,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
     /**
      * Close the drawer
      */
-    closeDrawer(): Promise<MatDrawerToggleResult>
-    {
+    closeDrawer(): Promise<MatDrawerToggleResult> {
         return this._clientsListComponent.matDrawer.close();
     }
 
@@ -184,14 +177,11 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
      *
      * @param editMode
      */
-    toggleEditMode(editMode: boolean | null = null): void
-    {
-        if ( editMode === null )
-        {
+    toggleEditMode(editMode: boolean | null = null): void {
+        if (editMode === null) {
             this.editMode = !this.editMode;
         }
-        else
-        {
+        else {
             this.editMode = editMode;
         }
 
@@ -202,13 +192,12 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
     /**
      * Update the client
      */
-    updateClient(): void
-    {
+    updateClient(): void {
         // Get the client object
         const client = this.clientForm.getRawValue();
 
         // Go through the client object and clear empty values
-        client.email = client.email.filter(email => email);
+       // client.email = client.email.filter(email => email);
 
         client.phoneNumbers = client.phoneNumbers.filter(phoneNumber => phoneNumber.phoneNumber);
 
@@ -223,11 +212,11 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
     /**
      * Delete the client
      */
-    deleteClient(): void
-    {
+    deleteClient(): void {
+        console.log(this.editMode) // AQUI BUSCO QUE VALOR TIENE EDITMODE Y SALE FALSE A PESAR QUE EN EL ON INIT SALGA TRUE
         // Open the confirmation dialog
         const confirmation = this._worthbankConfirmationService.open({
-            title  : 'Eliminar cliente',
+            title: 'Eliminar cliente',
             message: '¿Está seguro de que desea eliminar este cliente? ¡Esta acción no se puede deshacer!',
             actions: {
                 confirm: {
@@ -243,8 +232,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
         confirmation.afterClosed().subscribe((result) => {
 
             // If the confirm button pressed...
-            if ( result === 'confirmed' )
-            {
+            if (result === 'confirmed') {
                 // Get the current client's id
                 const id = this.client.id;
 
@@ -258,20 +246,17 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
                     .subscribe((isDeleted) => {
 
                         // Return if the client wasn't deleted...
-                        if ( !isDeleted )
-                        {
+                        if (!isDeleted) {
                             return;
                         }
 
                         // Navigate to the next client if available
-                        if ( nextClientId )
-                        {
-                            this._router.navigate(['../', nextClientId], {relativeTo: this._activatedRoute});
+                        if (nextClientId) {
+                            this._router.navigate(['../', nextClientId], { relativeTo: this._activatedRoute });
                         }
                         // Otherwise, navigate to the parent
-                        else
-                        {
-                            this._router.navigate(['../'], {relativeTo: this._activatedRoute});
+                        else {
+                            this._router.navigate(['../'], { relativeTo: this._activatedRoute });
                         }
 
                         // Toggle the edit mode off
@@ -290,11 +275,9 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
      *
      * @param fileList
      */
-    uploadAvatar(fileList: FileList): void
-    {
+    uploadAvatar(fileList: FileList): void {
         // Return if canceled
-        if ( !fileList.length )
-        {
+        if (!fileList.length) {
             return;
         }
 
@@ -302,8 +285,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
         const file = fileList[0];
 
         // Return if the file is not allowed
-        if ( !allowedTypes.includes(file.type) )
-        {
+        if (!allowedTypes.includes(file.type)) {
             return;
         }
 
@@ -314,8 +296,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
     /**
      * Remove the avatar
      */
-    removeAvatar(): void
-    {
+    removeAvatar(): void {
         // Get the form control for 'avatar'
         const avatarFormControl = this.clientForm.get('avatar');
 
@@ -334,8 +315,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
      *
      * @param index
      */
-    removeEmailField(index: number): void
-    {
+    removeEmailField(index: number): void {
         // Get form array for emails
         // const emailsFormArray = this.clientForm.get('email') as UntypedFormArray;
 
@@ -349,13 +329,12 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
     /**
      * Add an empty phone number field
      */
-    addPhoneNumberField(): void
-    {
+    addPhoneNumberField(): void {
         // Create an empty phone number form group
         const phoneNumberFormGroup = this._formBuilder.group({
-            country    : ['us'],
+            country: ['pe'],
             phoneNumber: [''],
-            label      : ['']
+            label: ['']
         });
 
         // Add the phone number form group to the phoneNumbers form array
@@ -370,8 +349,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
      *
      * @param index
      */
-    removePhoneNumberField(index: number): void
-    {
+    removePhoneNumberField(index: number): void {
         // Get form array for phone numbers
         const phoneNumbersFormArray = this.clientForm.get('phoneNumbers') as UntypedFormArray;
 
@@ -387,8 +365,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
      *
      * @param iso
      */
-    getCountryByIso(iso: string): Country
-    {
+    getCountryByIso(iso: string): Country {
         return this.countries.find(country => country.iso === iso);
     }
 
@@ -398,8 +375,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy
      * @param index
      * @param item
      */
-    trackByFn(index: number, item: any): any
-    {
+    trackByFn(index: number, item: any): any {
         return item.id || index;
     }
 }
