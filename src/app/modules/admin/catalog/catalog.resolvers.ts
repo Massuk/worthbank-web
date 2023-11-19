@@ -35,7 +35,7 @@ export class CatalogCategoriesResolver implements Resolve<any>
 @Injectable({
     providedIn: 'root'
 })
-export class CatalogCoursesResolver implements Resolve<any>
+export class CatalogCarsResolver implements Resolve<any>
 {
     /**
      * Constructor
@@ -63,7 +63,7 @@ export class CatalogCoursesResolver implements Resolve<any>
 @Injectable({
     providedIn: 'root'
 })
-export class CatalogCourseResolver implements Resolve<any>
+export class CatalogCarResolver implements Resolve<any>
 {
     /**
      * Constructor

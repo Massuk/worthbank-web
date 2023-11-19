@@ -7,7 +7,6 @@ export interface Client {
     phoneNumbers?: {
         country: string;
         phoneNumber: string;
-        label: string;
     }[];
     title?: string;
     company?: string;
@@ -20,9 +19,4 @@ export interface Country {
     name: string;
     code: string;
     flagImagePos: string;
-}
-
-export interface Tag {
-    id?: string;
-    title?: string;
 }

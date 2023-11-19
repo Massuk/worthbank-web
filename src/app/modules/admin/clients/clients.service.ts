@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Client, Country, Tag } from 'app/modules/admin/clients/clients.types';
+import { Client, Country } from 'app/modules/admin/clients/clients.types';
 
 @Injectable({
     providedIn: 'root'

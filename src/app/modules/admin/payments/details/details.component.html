@@ -15,17 +15,28 @@
             </div>
         </div>
 
-        <!-- Alert -->
+        <!-- Warning -->
         <div>
-        <worthbank-alert
-            [appearance]="'soft'"
-            [dismissible]="true"
-            [dismissed]="false"
-            [name]="'alertBox4'"
-            [type]="'info'">
-            Recuerda llenar los campos necesarios para poder simular
-            los datos y generar el <b>plan de pago</b>.
-        </worthbank-alert>
+            <worthbank-alert
+                [dismissible]="true"
+                [dismissed]="false"
+                [name]="'alertBox4'"
+                [type]="'warning'">
+                Recuerda llenar los campos necesarios para poder <b>simular</b>
+                los datos y generar el <b>plan de pago</b>.
+            </worthbank-alert>
+        </div>
+
+        <!-- Costs Info -->
+        <div>
+            <worthbank-alert
+                [appearance]="'soft'"
+                [dismissed]="false"
+                [name]="'alertBox4'"
+                [type]="'info'">
+                Los <b>costos iniciales</b> son <b>costos registrales (S/.89)</b> y 
+                <b>costos notariales (S/.230)</b>.
+            </worthbank-alert>
         </div>
 
         <!-- Name -->
@@ -55,7 +66,7 @@
                         <mat-label>Vehículo</mat-label>
                         <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:truck'"></mat-icon>
                         <mat-select [formControlName]="'vehiculo'" placeholder="Seleccione el vehículo">
-                            <mat-option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</mat-option>
+                            <mat-option *ngFor="let car of cars" [value]="car.id">{{ car.model }}</mat-option>
                         </mat-select>
                         <mat-error *ngIf="paymentForm.get('vehiculo').hasError('required')">Elige un vehículo</mat-error>
                     </mat-form-field>

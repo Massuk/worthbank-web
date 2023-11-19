@@ -4,6 +4,7 @@ import { PaymentsListComponent } from 'app/modules/admin/payments/list/list.comp
 import { PaymentsDetailsComponent } from 'app/modules/admin/payments/details/details.component';
 import { CanDeactivatePaymentsDetails } from 'app/modules/admin/payments/payments.guards';
 import { ClientsResolver } from '../clients/clients.resolvers';
+import { CatalogCarsResolver } from '../catalog/catalog.resolvers';
 
 export const paymentsRoutes: Route[] = [
   {
@@ -19,6 +20,7 @@ export const paymentsRoutes: Route[] = [
             component: PaymentsDetailsComponent,
             resolve: {
               client: ClientsResolver,
+              cars: CatalogCarsResolver,
             },
             canDeactivate: [CanDeactivatePaymentsDetails],
           },

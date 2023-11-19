@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDrawer, MatDrawerToggleResult } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { Client } from '../../clients/clients.types';
 import { ClientsService } from '../../clients/clients.service';
 import { WorthBankAlertService } from '@worthbank/components/alert';
+import { CatalogService } from '../../catalog/catalog.service';
+import { Brand, Car } from '../../catalog/catalog.types';
 
 @Component({
     selector: 'payments-details',
@@ -21,6 +23,8 @@ export class PaymentsDetailsComponent implements OnInit, OnDestroy{
     paymentsPlanCount: number = 0;
     paymentForm: UntypedFormGroup;
     clients: Client[];
+    cars: Car[];
+    brands: Brand[];
     searchInputControl: UntypedFormControl = new UntypedFormControl();
     private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -34,6 +38,7 @@ export class PaymentsDetailsComponent implements OnInit, OnDestroy{
             private _paymentsListComponent: PaymentsListComponent,
             private _formBuilder: UntypedFormBuilder,
             private _clientsService: ClientsService,
+            private _catalogService: CatalogService,
             private _worthbankConfirmationService: WorthBankConfirmationService,
             private _renderer2: Renderer2,
             private _router: Router,
@@ -82,6 +87,20 @@ export class PaymentsDetailsComponent implements OnInit, OnDestroy{
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((clients: Client[]) => {
                 this.clients = clients;
+            });
+
+        // Get the brands
+        this._catalogService.brands$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((brands: Brand[]) => {
+                this.brands = brands;
+            });  
+
+        // Get the cars
+        this._catalogService.cars$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((cars: Car[]) => {
+                this.cars = cars;
             });  
     }
     
