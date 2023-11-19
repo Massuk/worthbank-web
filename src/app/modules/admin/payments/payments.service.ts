@@ -6,7 +6,7 @@ import { Client, Country, Tag } from 'app/modules/admin/clients/clients.types';
 @Injectable({
     providedIn: 'root'
 })
-export class ClientsService
+export class PaymentsService
 {
     // Private
     private _client: BehaviorSubject<Client | null> = new BehaviorSubject(null);
@@ -55,7 +55,7 @@ export class ClientsService
     /**
      * Get clients
      */
-    getClients(): Observable<Client[]>
+    getPayments(): Observable<Client[]>
     {
         return this._httpClient.get<Client[]>('api/apps/clients/all').pipe(
             tap((clients) => {

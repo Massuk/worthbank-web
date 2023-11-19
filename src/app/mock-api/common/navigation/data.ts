@@ -19,9 +19,22 @@ export const defaultNavigation: WorthBankNavigationItem[] = [
             {
                 id   : 'dashboard.clients',
                 title: 'Clientes',
-                type : 'basic',
+                type : 'collapsable',
                 icon : 'heroicons_outline:user-group',
-                link : '/dashboard/clients'
+                children: [
+                    {
+                        id   : 'dashboard.inventory',
+                        title: 'Lista de clientes',
+                        type : 'basic',
+                        link : '/dashboard/clients',
+                    },
+                    {
+                        id   : 'dashboard.payments',
+                        title: 'Planes de pago',
+                        type : 'basic',
+                        link : '/dashboard/payments'
+                    },
+                ]
             },
             {
                 id   : 'dashboard.catalog',
@@ -29,7 +42,7 @@ export const defaultNavigation: WorthBankNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:truck',
                 link : '/dashboard/catalog'
-            },
+            },          
         ]
     },
 ];

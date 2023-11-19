@@ -78,10 +78,10 @@ export const appRoutes: Route[] = [
             },
             {
                 path: 'clients',
-                children: [
-                    { path: '', loadChildren: () =>import('app/modules/admin/clients/clients.module').then((m) => m.ClientsModule) },
-                    // { path: 'payment', loadChildren: () =>import('app/modules/admin/clients/payment/payment.module').then((m) => m.PaymentModule) }
-                ]
+                loadChildren: () =>
+                import('app/modules/admin/clients/clients.module').then(
+                    (m) => m.ClientsModule
+                ),
             },
             {
                 path: 'catalog',
@@ -91,10 +91,10 @@ export const appRoutes: Route[] = [
                     ),
             },
             {
-                path: 'payment',
+                path: 'payments',
                 loadChildren: () =>
-                    import('app/modules/admin/clients/payment/payment.module').then(
-                        (m) => m.PaymentModule
+                    import('app/modules/admin/payments/payments.module').then(
+                        (m) => m.PaymentsModule
                     ),
             },
         ],

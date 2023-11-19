@@ -52,20 +52,6 @@
                                 {{ client.name.charAt(0) }}
                             </div>
                         </div>
-                        <!-- Actions -->
-                        <div class="flex items-center ml-auto mb-1">
-                            <!-- Payment -->
-                            <button
-                                mat-stroked-button
-                                [routerLink]="['/dashboard/payment']"
-                            >
-                                <mat-icon
-                                    class="icon-size-5"
-                                    svgIcon="mat_outline:payment"
-                                ></mat-icon>
-                                <span class="ml-2">Plan de pagos</span>
-                            </button>
-                        </div>
                         <div class="flex items-center ml-auto mb-1">
                             <!-- Edit client -->
                             <button mat-flat-button (click)="toggleEditMode(true)">

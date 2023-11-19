@@ -172,6 +172,8 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy {
         return this._clientsListComponent.matDrawer.close();
     }
 
+    
+
     /**
      * Toggle edit mode
      *

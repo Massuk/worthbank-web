@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
-import { ClientsService } from 'app/modules/admin/clients/clients.service';
-import { Client, Country } from 'app/modules/admin/clients/clients.types';
+//import { PaymentsService } from 'app/modules/admin/clients/clients.service';
+import { Client, Country, Tag } from 'app/modules/admin/clients/clients.types';
+import { PaymentsService } from './payments.service';
+import { ClientsService } from '../clients/clients.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ClientsResolver implements Resolve<any>
+export class PaymentsResolver implements Resolve<any>
 {
     /**
      * Constructor

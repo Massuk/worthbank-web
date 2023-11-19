@@ -12,11 +12,11 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { DatePipe } from '@angular/common';
+import { PaymentsComponent } from './modules/admin/payments/payments.component';
 
 registerLocaleData(localeEs);
 
@@ -27,7 +27,7 @@ const routerConfig: ExtraOptions = {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         BrowserModule,
@@ -49,8 +49,8 @@ const routerConfig: ExtraOptions = {
         AppComponent
     ],
     providers: [
-        { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, // Configura el idioma para los componentes de Angular Material
-        { provide: LOCALE_ID, useValue: 'es' }, // Configura el idioma globalmente
+        { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
+        { provide: LOCALE_ID, useValue: 'es' }, 
         DatePipe,
     ]
 })
