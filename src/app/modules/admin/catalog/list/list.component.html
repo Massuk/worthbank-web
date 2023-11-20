@@ -74,10 +74,10 @@
                                     <ng-container *ngIf="(car.brand | worthbankFindByKey:'badge':brands) as brand">
                                         <div
                                             class="py-0.5 px-3 rounded-full text-sm font-semibold"
-                                            [ngClass]="{'text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500': brand.badge === 'bmw',
-                                                        'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500': brand.badge === 'toyota',
-                                                        'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500': brand.badge === 'hyundai',
-                                                        'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500': brand.badge === 'kia'}">
+                                            [ngClass]="{'text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500': brand.badge === 'BMW',
+                                                        'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500': brand.badge === 'Toyota',
+                                                        'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500': brand.badge === 'Hyundai',
+                                                        'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500': brand.badge === 'Kia'}">
                                             {{brand.name}}
                                         </div>
                                     </ng-container>
@@ -110,22 +110,17 @@
                                 <div class="px-6 py-4 text-right bg-gray-50 dark:bg-transparent">
                                     <a
                                         mat-stroked-button
-                                        [disabled]="!car.available"
-                                        [routerLink]="[car.id]">
+                                        [disabled]="!car.available">
                                         <span class="inline-flex items-center">
 
                                             <!-- Available -->
                                             <ng-container *ngIf="car.available === true">
-                                                <span>Vender</span>
+                                                <span>Precio: <b>${{car.price}}</b></span>
                                             </ng-container>
                                             <!-- Not available -->
                                             <ng-container *ngIf="car.available === false">
                                                 <span>No disponible</span>
                                             </ng-container>
-
-                                            <mat-icon
-                                                class="ml-1.5 icon-size-5"
-                                                [svgIcon]="'heroicons_solid:arrow-sm-right'"></mat-icon>
                                         </span>
                                     </a>
                                 </div>

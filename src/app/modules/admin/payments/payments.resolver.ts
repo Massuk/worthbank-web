@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
-//import { PaymentsService } from 'app/modules/admin/clients/clients.service';
-import { Client, Country, Tag } from 'app/modules/admin/clients/clients.types';
+import { Payment, Plan} from 'app/modules/admin/payments/payments.types';
 import { PaymentsService } from './payments.service';
-import { ClientsService } from '../clients/clients.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +12,7 @@ export class PaymentsResolver implements Resolve<any>
     /**
      * Constructor
      */
-    constructor(private _clientsService: ClientsService)
+    constructor(private _paymentsService: PaymentsService)
     {
     }
 
@@ -28,9 +26,9 @@ export class PaymentsResolver implements Resolve<any>
      * @param route
      * @param state
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Client[]>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Payment[]>
     {
-        return this._clientsService.getClients();
+        return this._paymentsService.getPayments();
     }
 }
 
@@ -43,7 +41,7 @@ export class ClientsClientResolver implements Resolve<any>
      * Constructor
      */
     constructor(
-        private _clientsService: ClientsService,
+        private _paymentsService: PaymentsService,
         private _router: Router
     )
     {
@@ -59,9 +57,9 @@ export class ClientsClientResolver implements Resolve<any>
      * @param route
      * @param state
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Client>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Payment>
     {
-        return this._clientsService.getClientById(route.paramMap.get('id'))
+        return this._paymentsService.getPaymentById(route.paramMap.get('id'))
                    .pipe(
                        // Error here means the requested client is not available
                        catchError((error) => {
@@ -90,7 +88,7 @@ export class ClientsCountriesResolver implements Resolve<any>
     /**
      * Constructor
      */
-    constructor(private _clientsService: ClientsService)
+    constructor(private _paymentsService: PaymentsService)
     {
     }
 
@@ -104,8 +102,8 @@ export class ClientsCountriesResolver implements Resolve<any>
      * @param route
      * @param state
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Country[]>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Plan[]>
     {
-        return this._clientsService.getCountries();
+        return this._paymentsService.getPlans();
     }
 }

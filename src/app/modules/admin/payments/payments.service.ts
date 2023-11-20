@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Client, Country, Tag } from 'app/modules/admin/clients/clients.types';
+import { Payment, Plan} from 'app/modules/admin/payments/payments.types';
 
 @Injectable({
     providedIn: 'root'
@@ -9,9 +9,9 @@ import { Client, Country, Tag } from 'app/modules/admin/clients/clients.types';
 export class PaymentsService
 {
     // Private
-    private _client: BehaviorSubject<Client | null> = new BehaviorSubject(null);
-    private _clients: BehaviorSubject<Client[] | null> = new BehaviorSubject(null);
-    private _countries: BehaviorSubject<Country[] | null> = new BehaviorSubject(null);
+    private _payment: BehaviorSubject<Payment | null> = new BehaviorSubject(null);
+    private _payments: BehaviorSubject<Payment[] | null> = new BehaviorSubject(null);
+    private _plans: BehaviorSubject<Plan[] | null> = new BehaviorSubject(null);
 
     /**
      * Constructor
@@ -25,27 +25,27 @@ export class PaymentsService
     // -----------------------------------------------------------------------------------------------------
 
     /**
-     * Getter for client
+     * Getter for payment
      */
-    get client$(): Observable<Client>
+    get payment$(): Observable<Payment>
     {
-        return this._client.asObservable();
+        return this._payment.asObservable();
     }
 
     /**
-     * Getter for clients
+     * Getter for payments
      */
-    get clients$(): Observable<Client[]>
+    get payments$(): Observable<Payment[]>
     {
-        return this._clients.asObservable();
+        return this._payments.asObservable();
     }
 
     /**
-     * Getter for countries
+     * Getter for plans
      */
-    get countries$(): Observable<Country[]>
+    get plans$(): Observable<Plan[]>
     {
-        return this._countries.asObservable();
+        return this._plans.asObservable();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -53,121 +53,121 @@ export class PaymentsService
     // -----------------------------------------------------------------------------------------------------
 
     /**
-     * Get clients
+     * Get payments
      */
-    getPayments(): Observable<Client[]>
+    getPayments(): Observable<Payment[]>
     {
-        return this._httpClient.get<Client[]>('api/apps/clients/all').pipe(
-            tap((clients) => {
-                this._clients.next(clients);
+        return this._httpClient.get<Payment[]>('api/apps/payments/all').pipe(
+            tap((payments) => {
+                this._payments.next(payments);
             })
         );
     }
 
     /**
-     * Search clients with given query
+     * Search payments with given query
      *
      * @param query
      */
-    searchClients(query: string): Observable<Client[]>
+    searchPayments(query: string): Observable<Payment[]>
     {
-        return this._httpClient.get<Client[]>('api/apps/clients/search', {
+        return this._httpClient.get<Payment[]>('api/apps/payments/search', {
             params: {query}
         }).pipe(
-            tap((clients) => {
-                this._clients.next(clients);
+            tap((payments) => {
+                this._payments.next(payments);
             })
         );
     }
 
     /**
-     * Get client by id
+     * Get payment by id
      */
-    getClientById(id: string): Observable<Client>
+    getPaymentById(id: string): Observable<Payment>
     {
-        return this._clients.pipe(
+        return this._payments.pipe(
             take(1),
-            map((clients) => {
+            map((payments) => {
 
-                // Find the client
-                const client = clients.find(item => item.id === id) || null;
+                // Find the payment
+                const payment = payments.find(item => item.id === id) || null;
 
-                // Update the client
-                this._client.next(client);
+                // Update the payment
+                this._payment.next(payment);
 
-                // Return the client
-                return client;
+                // Return the payment
+                return payment;
             }),
-            switchMap((client) => {
+            switchMap((payment) => {
 
-                if ( !client )
+                if ( !payment )
                 {
-                    return throwError('Could not found client with id of ' + id + '!');
+                    return throwError('Could not found payment with id of ' + id + '!');
                 }
 
-                return of(client);
+                return of(payment);
             })
         );
     }
 
     /**
-     * Create client
+     * Create payment
      */
-    createClient(): Observable<Client>
+    createPayment(): Observable<Payment>
     {
-        return this.clients$.pipe(
+        return this.payments$.pipe(
             take(1),
-            switchMap(clients => this._httpClient.post<Client>('api/apps/clients/client', {}).pipe(
-                map((newClient) => {
+            switchMap(payments => this._httpClient.post<Payment>('api/apps/payments/payment', {}).pipe(
+                map((newPayment) => {
 
-                    // Update the clients with the new client
-                    this._clients.next([newClient, ...clients]);
+                    // Update the payments with the new payment
+                    this._payments.next([newPayment, ...payments]);
 
-                    // Return the new client
-                    return newClient;
+                    // Return the new payment
+                    return newPayment;
                 })
             ))
         );
     }
 
     /**
-     * Update client
+     * Update payment
      *
      * @param id
-     * @param client
+     * @param payment
      */
-    updateClient(id: string, client: Client): Observable<Client>
+    updateClient(id: string, payment: Payment): Observable<Payment>
     {
-        return this.clients$.pipe(
+        return this.payments$.pipe(
             take(1),
-            switchMap(clients => this._httpClient.patch<Client>('api/apps/clients/client', {
+            switchMap(payments => this._httpClient.patch<Payment>('api/apps/payments/payment', {
                 id,
-                client
+                payment
             }).pipe(
-                map((updatedClient) => {
+                map((updatedPayment) => {
 
-                    // Find the index of the updated client
-                    const index = clients.findIndex(item => item.id === id);
+                    // Find the index of the updated payment
+                    const index = payments.findIndex(item => item.id === id);
 
-                    // Update the client
-                    clients[index] = updatedClient;
+                    // Update the payment
+                    payments[index] = updatedPayment;
 
-                    // Update the clients
-                    this._clients.next(clients);
+                    // Update the payments
+                    this._payments.next(payments);
 
-                    // Return the updated client
-                    return updatedClient;
+                    // Return the updated payment
+                    return updatedPayment;
                 }),
-                switchMap(updatedClient => this.client$.pipe(
+                switchMap(updatedPayment => this.payment$.pipe(
                     take(1),
                     filter(item => item && item.id === id),
                     tap(() => {
 
-                        // Update the client if it's selected
-                        this._client.next(updatedClient);
+                        // Update the payment if it's selected
+                        this._payment.next(updatedPayment);
 
-                        // Return the updated client
-                        return updatedClient;
+                        // Return the updated payment
+                        return updatedPayment;
                     })
                 ))
             ))
@@ -175,25 +175,25 @@ export class PaymentsService
     }
 
     /**
-     * Delete the client
+     * Delete the payment
      *
      * @param id
      */
-    deleteClient(id: string): Observable<boolean>
+    deletePayment(id: string): Observable<boolean>
     {
-        return this.clients$.pipe(
+        return this.payments$.pipe(
             take(1),
-            switchMap(clients => this._httpClient.delete('api/apps/clients/client', {params: {id}}).pipe(
+            switchMap(payments => this._httpClient.delete('api/apps/payments/payment', {params: {id}}).pipe(
                 map((isDeleted: boolean) => {
 
-                    // Find the index of the deleted client
-                    const index = clients.findIndex(item => item.id === id);
+                    // Find the index of the deleted payment
+                    const index = payments.findIndex(item => item.id === id);
 
-                    // Delete the client
-                    clients.splice(index, 1);
+                    // Delete the payment
+                    payments.splice(index, 1);
 
-                    // Update the clients
-                    this._clients.next(clients);
+                    // Update the payments
+                    this._payments.next(payments);
 
                     // Return the deleted status
                     return isDeleted;
@@ -203,63 +203,15 @@ export class PaymentsService
     }
 
     /**
-     * Get countries
+     * Get plans
      */
-    getCountries(): Observable<Country[]>
+    getPlans(): Observable<Plan[]>
     {
-        return this._httpClient.get<Country[]>('api/apps/clients/countries').pipe(
-            tap((countries) => {
-                this._countries.next(countries);
+        return this._httpClient.get<Plan[]>('api/apps/payments/plans').pipe(
+            tap((plans) => {
+                this._plans.next(plans);
             })
         );
     }
 
-    /**
-     * Update the avatar of the given client
-     *
-     * @param id
-     * @param avatar
-     */
-    uploadAvatar(id: string, avatar: File): Observable<Client>
-    {
-        return this.clients$.pipe(
-            take(1),
-            switchMap(clients => this._httpClient.post<Client>('api/apps/clients/avatar', {
-                id,
-                avatar
-            }, {
-                headers: {
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                    'Content-Type': avatar.type
-                }
-            }).pipe(
-                map((updatedClient) => {
-
-                    // Find the index of the updated client
-                    const index = clients.findIndex(item => item.id === id);
-
-                    // Update the client
-                    clients[index] = updatedClient;
-
-                    // Update the clients
-                    this._clients.next(clients);
-
-                    // Return the updated client
-                    return updatedClient;
-                }),
-                switchMap(updatedClient => this.client$.pipe(
-                    take(1),
-                    filter(item => item && item.id === id),
-                    tap(() => {
-
-                        // Update the client if it's selected
-                        this._client.next(updatedClient);
-
-                        // Return the updated client
-                        return updatedClient;
-                    })
-                ))
-            ))
-        );
-    }
 }

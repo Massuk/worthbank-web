@@ -24,6 +24,7 @@ import { paymentsRoutes } from 'app/modules/admin/payments/payments.routing';
 import { PaymentsDetailsComponent } from 'app/modules/admin/payments/details/details.component';
 import { PaymentsComponent } from 'app/modules/admin/payments/payments.component';
 import { WorthBankAlertModule } from '@worthbank/components/alert';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -52,6 +53,7 @@ import { WorthBankAlertModule } from '@worthbank/components/alert';
         MatTooltipModule,
         WorthBankFindByKeyPipeModule,
         SharedModule,
+        CommonModule,
         WorthBankAlertModule
     ],
     providers   : [

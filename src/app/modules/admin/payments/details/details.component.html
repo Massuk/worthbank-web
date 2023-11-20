@@ -66,7 +66,7 @@
                         <mat-label>Vehículo</mat-label>
                         <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:truck'"></mat-icon>
                         <mat-select [formControlName]="'vehiculo'" placeholder="Seleccione el vehículo">
-                            <mat-option *ngFor="let car of cars" [value]="car.id">{{ car.model }}</mat-option>
+                            <mat-option *ngFor="let car of cars" [value]="car.id">{{ car.brand }} {{ car.model }}</mat-option>
                         </mat-select>
                         <mat-error *ngIf="paymentForm.get('vehiculo').hasError('required')">Elige un vehículo</mat-error>
                     </mat-form-field>
@@ -117,7 +117,8 @@
                                         [placeholder]="'Ingrese el porcentaje'"
                                         step="0.01"
                                         min="5" max="20">
-                                        <span matPrefix>S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'soles'">S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'dolares'">$</span>
                                 </mat-form-field>
                                 <mat-form-field
                                     class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4">
@@ -126,7 +127,8 @@
                                         matInput
                                         [formControlName]="'costosIniciales'"
                                         [placeholder]="'Cuota inicial'">
-                                        <span matPrefix>S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'soles'">S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'dolares'">$</span>
                                 </mat-form-field>
                             </div>
                         </ng-container>
@@ -137,7 +139,7 @@
                         <ng-container >
                             <div class="flex">
                                 <mat-form-field class="flex-auto">
-                                    <mat-label>Cuota inicial (%)</mat-label>
+                                    <mat-label>Cuota inicial (20% a 49%)</mat-label>
                                     <mat-icon
                                         matPrefix
                                         class="hidden sm:flex icon-size-5"
@@ -147,18 +149,20 @@
                                         type="number"
                                         [formControlName]="'porcentajeCuotaInicial'"
                                         [placeholder]="'Ingrese el porcentaje'"
-                                        step="0.01"
-                                        min="5" max="20">
+                                        step="0.10"
+                                        min="20" max="49">
                                         <span matSufix>%</span>
                                         <mat-error *ngIf="paymentForm.get('porcentajeCuotaInicial').hasError('required')">Ingrese el porcentaje de cuota inicial</mat-error>
-                                </mat-form-field>
+                                        <mat-error *ngIf="paymentForm.get('porcentajeCuotaInicial').hasError('min') || paymentForm.get('porcentajeCuotaInicial').hasError('max')">El porcentaje debe estar entre 20% y 49%</mat-error>
+                                    </mat-form-field>
                                 <mat-form-field
                                     class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4">
                                     <mat-label>Cuota inicial</mat-label>
                                     <input
                                         matInput
                                         [formControlName]="'cuotaInicial'">
-                                        <span matPrefix>S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'soles'">S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'dolares'">$</span>
                                 </mat-form-field>
                             </div>
                         </ng-container>
@@ -172,7 +176,8 @@
                         matInput
                         [formControlName]="'montoPrestamo'"
                         [placeholder]="'Cuota inicial'">
-                        <span matPrefix>S/.</span>
+                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'soles'">S/.</span>
+                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'dolares'">$</span>
                         <mat-error *ngIf="paymentForm.get('cliente').hasError('required')">Elige un cliente</mat-error>
                     </mat-form-field>
 
@@ -181,7 +186,7 @@
                         <ng-container >
                             <div class="flex">
                                 <mat-form-field class="flex-auto">
-                                    <mat-label>Cuota final (%)</mat-label>
+                                    <mat-label>Cuota final (35% a {{ maxValue }}%)</mat-label>
                                     <mat-icon
                                         matPrefix
                                         class="hidden sm:flex icon-size-5"
@@ -191,10 +196,12 @@
                                         type="number"
                                         [formControlName]="'porcentajeCuotaFinal'"
                                         [placeholder]="'Ingrese el porcentaje'"
-                                        step="0.01"
-                                        min="5" max="20">
+                                        step="0.10"
+                                        min="35" [max]="maxValue">
                                         <span matSufix>%</span>
                                         <mat-error *ngIf="paymentForm.get('porcentajeCuotaFinal').hasError('required')">Ingrese el porcentaje de cuota final</mat-error>
+                                        <mat-error *ngIf="paymentForm.get('porcentajeCuotaFinal').hasError('min') || paymentForm.get('porcentajeCuotaFinal').hasError('max')">El porcentaje debe estar entre 35% y {{ maxValue }}%</mat-error>
+
                                 </mat-form-field>
                                 <mat-form-field
                                     class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4">
@@ -202,7 +209,8 @@
                                     <input
                                         matInput
                                         [formControlName]="'cuotaFinal'">
-                                        <span matPrefix>S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'soles'">S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'dolares'">$</span>
                                 </mat-form-field>
                             </div>
                         </ng-container>
@@ -234,7 +242,8 @@
                                     <input
                                         matInput
                                         [formControlName]="'financEnCuotas'">
-                                        <span matPrefix>S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'soles'">S/.</span>
+                                        <span matPrefix *ngIf="paymentForm.get('moneda').value === 'dolares'">$</span>
                                 </mat-form-field>
                             </div>
                         </ng-container>
@@ -248,7 +257,8 @@
                                     <mat-label>Tipo de tasa</mat-label>
                                     <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:selector'"></mat-icon>
                                     <mat-select [formControlName]="'tipoTasa'" placeholder="Seleccione el tipo de tasa">
-                                        <mat-option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</mat-option>
+                                        <mat-option value="nominal">Nominal anual</mat-option>
+                                        <mat-option value="efectiva">Efectiva anual</mat-option>
                                     </mat-select>
                                     <mat-error *ngIf="paymentForm.get('tipoTasa').hasError('required')">Elige el tipo de tasa</mat-error>
                                 </mat-form-field>
@@ -272,18 +282,20 @@
                                 <mat-form-field class="flex-auto">
                                     <mat-label>Plan</mat-label>
                                     <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:selector'"></mat-icon>
-                                    <mat-select [formControlName]="'plan'" placeholder="Seleccione el plan">
-                                        <mat-option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</mat-option>
+                                    <mat-select [formControlName]="'plan'" placeholder="Seleccione el tipo de tasa">
+                                        <mat-option [value]="24">Plan 24</mat-option>
+                                        <mat-option [value]="36">Plan 36</mat-option>
                                     </mat-select>
-                                    <mat-error *ngIf="paymentForm.get('plan').hasError('required')">Elige el plan</mat-error>
+                                    <mat-error *ngIf="paymentForm.get('tipoTasa').hasError('required')">Elige el tipo de plan</mat-error>
                                 </mat-form-field>
-                                <mat-form-field class="flex-auto ml-2">
-                                    <mat-label>Tipo de seguro desgravamen</mat-label>
-                                    <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:selector'"></mat-icon>
-                                    <mat-select [formControlName]="'seguroDesgravamen'" placeholder="Seleccione el tipo">
-                                        <mat-option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="paymentForm.get('seguroDesgravamen').hasError('required')">Elige el tipo de seguro desgravamen</mat-error>
+                                <mat-form-field
+                                    class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4">
+                                    <mat-label>Seguro desgravamen</mat-label>
+                                    <input
+                                        matInput
+                                        [formControlName]="'seguroDesgravamen'">
+                                        <span matSufix>%</span>
+                                        <mat-error *ngIf="paymentForm.get('seguroDesgravamen').hasError('required')">Ingrese el desgravamen</mat-error>
                                 </mat-form-field>
                             </div>
                         </ng-container>
@@ -297,7 +309,8 @@
                                     <mat-label>Tipo de periodo de gracia</mat-label>
                                     <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:selector'"></mat-icon>
                                     <mat-select [formControlName]="'tipoPeriodoGracia'" placeholder="Seleccione el tipo de tasa">
-                                        <mat-option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</mat-option>
+                                        <mat-option value="parcial">Parcial</mat-option>
+                                        <mat-option value="total">Total</mat-option>
                                     </mat-select>
                                     <mat-error *ngIf="paymentForm.get('tipoPeriodoGracia').hasError('required')">Elige el tipo de periodo de gracia</mat-error>
                                 </mat-form-field>
@@ -307,7 +320,6 @@
                                     <input
                                         matInput
                                         [formControlName]="'periodosGracia'">
-                                        <span matSufix>%</span>
                                         <mat-error *ngIf="paymentForm.get('periodosGracia').hasError('required')">Ingrese la cantidad de periodos</mat-error>
                                 </mat-form-field>
                             </div>
@@ -321,6 +333,7 @@
                             mat-button
                             [color]="'warn'"
                             [matTooltip]="'Cancelar'"
+                            (click)="closeDrawer()"
                             >
                             Cancelar
                         </button>
@@ -329,6 +342,7 @@
                             class="ml-auto"
                             mat-button
                             [matTooltip]="'Simular plan'"
+                            (click)="probar()"
                             >
                             Simular
                         </button>

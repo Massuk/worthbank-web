@@ -7,7 +7,7 @@ import { CatalogService } from 'app/modules/admin/catalog/catalog.service';
 @Injectable({
     providedIn: 'root'
 })
-export class CatalogCategoriesResolver implements Resolve<any>
+export class CatalogBrandsResolver implements Resolve<any>
 {
     /**
      * Constructor
@@ -28,7 +28,7 @@ export class CatalogCategoriesResolver implements Resolve<any>
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Brand[]>
     {
-        return this._catalogService.getCategories();
+        return this._catalogService.getBrands();
     }
 }
 

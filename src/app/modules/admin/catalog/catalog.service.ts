@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import {
+    BehaviorSubject,
+    combineLatest,
+    map,
+    Observable,
+    of,
+    switchMap,
+    take,
+    tap,
+    throwError,
+} from 'rxjs';
 import { Brand, Car } from 'app/modules/admin/catalog/catalog.types';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
-export class CatalogService
-{
+export class CatalogService {
     // Private
     private _brands: BehaviorSubject<Brand[] | null> = new BehaviorSubject(null);
     private _car: BehaviorSubject<Car | null> = new BehaviorSubject(null);
@@ -16,9 +25,7 @@ export class CatalogService
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
-    {
-    }
+    constructor(private _httpClient: HttpClient) {}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
@@ -27,25 +34,22 @@ export class CatalogService
     /**
      * Getter for brands
      */
-    get brands$(): Observable<Brand[]>
-    {
+    get brands$(): Observable<Brand[]> {
         return this._brands.asObservable();
-    }
-
-    /**
-     * Getter for cars
-     */
-    get cars$(): Observable<Car[]>
-    {
-        return this._cars.asObservable();
     }
 
     /**
      * Getter for car
      */
-    get car$(): Observable<Car>
-    {
+    get car$(): Observable<Car> {
         return this._car.asObservable();
+    }
+
+    /**
+     * Getter for cars
+     */
+    get cars$(): Observable<Car[]> {
+        return this._cars.asObservable();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -55,8 +59,7 @@ export class CatalogService
     /**
      * Get brands
      */
-    getCategories(): Observable<Brand[]>
-    {
+    getBrands(): Observable<Brand[]> {
         return this._httpClient.get<Brand[]>('api/apps/catalog/brands').pipe(
             tap((response: any) => {
                 this._brands.next(response);
@@ -67,8 +70,7 @@ export class CatalogService
     /**
      * Get cars
      */
-    getCars(): Observable<Car[]>
-    {
+    getCars(): Observable<Car[]> {
         return this._httpClient.get<Car[]>('api/apps/catalog/cars').pipe(
             tap((response: any) => {
                 this._cars.next(response);
@@ -76,18 +78,23 @@ export class CatalogService
         );
     }
 
+
     /**
      * Get car by id
      */
     getCarById(id: string): Observable<Car>
     {
-        return this._httpClient.get<Car>('api/apps/catalog/cars/car', {params: {id}}).pipe(
-            map((car) => {
+        return this._cars.pipe(
+            take(1),
+            map((cars) => {
 
-                // Update the car
+                // Find the client
+                const car = cars.find(item => item.id === id) || null;
+
+                // Update the client
                 this._car.next(car);
 
-                // Return the car
+                // Return the client
                 return car;
             }),
             switchMap((car) => {

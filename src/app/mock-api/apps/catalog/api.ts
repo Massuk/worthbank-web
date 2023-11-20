@@ -6,7 +6,7 @@ import { brands as brandsData, cars as carsData } from 'app/mock-api/apps/catalo
 @Injectable({
     providedIn: 'root'
 })
-export class AcademyMockApi
+export class CarsMockApi
 {
     private _brands: any[] = brandsData;
     private _cars: any[] = carsData;
@@ -46,6 +46,25 @@ export class AcademyMockApi
             });
 
         // -----------------------------------------------------------------------------------------------------
+        // @ Car - GET
+        // -----------------------------------------------------------------------------------------------------
+        this._worthbankMockApiService
+            .onGet('api/apps/catalog/cars/car')
+            .reply(({ request }) => {
+
+                // Get the id from the params
+                const id = request.params.get('id');
+
+                // Clone the cars
+                const cars = cloneDeep(this._cars);
+
+                // Find the car
+                const car = cars.find(item => item.id === id);
+
+                return [200, cars];
+            });
+
+        // -----------------------------------------------------------------------------------------------------
         // @ Cars - GET
         // -----------------------------------------------------------------------------------------------------
         this._worthbankMockApiService
@@ -57,5 +76,7 @@ export class AcademyMockApi
 
                 return [200, cars];
             });
+
+            
     }
 }

@@ -21,8 +21,10 @@ export class PaymentsListComponent implements OnInit{
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     displayedColumns: string[] = [
         'name',
-        'lastname',
-        'status',
+        'car',
+        'price',
+        'van',
+        'tir',
         'actions'
       ];
     
