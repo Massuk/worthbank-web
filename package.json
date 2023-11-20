@@ -10,8 +10,10 @@
         "start": "ng serve",
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
-        "test": "ng test"
+        "test": "ng test",
+        "server": "json-server --port 5000 --watch database.js"
     },
+
     "dependencies": {
         "@angular/animations": "15.1.1",
         "@angular/cdk": "15.1.1",

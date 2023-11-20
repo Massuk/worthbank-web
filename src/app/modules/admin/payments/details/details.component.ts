@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentsListComponent } from '../list/list.component';
 import { WorthBankConfirmationService } from '@worthbank/services/confirmation';
 import { OverlayRef } from '@angular/cdk/overlay';
-import { Subject, combineLatest, startWith, switchMap, takeUntil } from 'rxjs';
+import { Subject, combineLatest, startWith, takeUntil } from 'rxjs';
 import { Client } from '../../clients/clients.types';
 import { ClientsService } from '../../clients/clients.service';
 import { WorthBankAlertService } from '@worthbank/components/alert';
@@ -163,10 +163,6 @@ export class PaymentsDetailsComponent implements OnInit, OnDestroy{
     /**
      * Operations
      */
-    calculateValues(): void {
-        
-    }
-
     setupFormChanges(): void {
         this.paymentForm.get('vehiculo').valueChanges
         .pipe(takeUntil(this._unsubscribeAll))
@@ -284,9 +280,9 @@ export class PaymentsDetailsComponent implements OnInit, OnDestroy{
         });
     }
 
-    probar(){
-        Object.keys(this.paymentForm.controls).forEach(controlName => {
-            console.log(`Estado del control ${controlName}:`, this.paymentForm.get(controlName).status);
-          });
+    createPlan(): void {
+        const formData = this.paymentForm.value;
+        console.log('Datos del formulario:', formData);
     }
+
 }

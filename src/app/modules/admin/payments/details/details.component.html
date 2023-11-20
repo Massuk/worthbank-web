@@ -49,7 +49,7 @@
         <!-- Payment Form-->
         <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
             <div class="w-full max-w-3xl">
-                <form [formGroup]="paymentForm" >
+                <form [formGroup]="paymentForm">
 
                     <!-- Client -->
                     <mat-form-field class="w-full my-1">
@@ -267,6 +267,7 @@
                                     <mat-label>Tasa</mat-label>
                                     <input
                                         matInput
+                                        type="number"
                                         [formControlName]="'tasa'">
                                         <span matSufix>%</span>
                                         <mat-error *ngIf="paymentForm.get('tasa').hasError('required')">Ingrese la tasa</mat-error>
@@ -292,6 +293,7 @@
                                     class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4">
                                     <mat-label>Seguro desgravamen</mat-label>
                                     <input
+                                        type="number"
                                         matInput
                                         [formControlName]="'seguroDesgravamen'">
                                         <span matSufix>%</span>
@@ -342,7 +344,6 @@
                             class="ml-auto"
                             mat-button
                             [matTooltip]="'Simular plan'"
-                            (click)="probar()"
                             >
                             Simular
                         </button>
@@ -353,6 +354,7 @@
                             [color]="'primary'"
                             [disabled]="paymentForm.invalid"
                             [matTooltip]="'Crear plan'"
+                            (click)="createPlan()"
                             >
                             Crear plan
                         </button>
