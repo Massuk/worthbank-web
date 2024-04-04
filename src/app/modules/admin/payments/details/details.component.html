@@ -56,7 +56,7 @@
                         <mat-label>Cliente</mat-label>
                         <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:user'"></mat-icon>
                         <mat-select [formControlName]="'cliente'" placeholder="Seleccione el cliente">
-                            <mat-option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</mat-option>
+                            <mat-option *ngFor="let client of clients" [value]="client">{{ client.name }}</mat-option>
                         </mat-select>
                         <mat-error *ngIf="paymentForm.get('cliente').hasError('required')">Elige un cliente</mat-error>
                     </mat-form-field>
@@ -66,7 +66,7 @@
                         <mat-label>Vehículo</mat-label>
                         <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:truck'"></mat-icon>
                         <mat-select [formControlName]="'vehiculo'" placeholder="Seleccione el vehículo">
-                            <mat-option *ngFor="let car of cars" [value]="car.id">{{ car.brand }} {{ car.model }}</mat-option>
+                            <mat-option *ngFor="let car of cars" [value]="car">{{ car.brand }} {{ car.model }}</mat-option>
                         </mat-select>
                         <mat-error *ngIf="paymentForm.get('vehiculo').hasError('required')">Elige un vehículo</mat-error>
                     </mat-form-field>
@@ -173,6 +173,7 @@
                         <mat-label>Monto del préstamo</mat-label>
                         <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:cash'"></mat-icon>
                         <input
+                        type="number"
                         matInput
                         [formControlName]="'montoPrestamo'"
                         [placeholder]="'Cuota inicial'">
@@ -188,12 +189,12 @@
                                 <mat-form-field class="flex-auto">
                                     <mat-label>Cuota final (35% a {{ maxValue }}%)</mat-label>
                                     <mat-icon
+                                        type="number"
                                         matPrefix
                                         class="hidden sm:flex icon-size-5"
                                         [svgIcon]="'heroicons_solid:receipt-tax'"></mat-icon>
                                         <input
                                         matInput
-                                        type="number"
                                         [formControlName]="'porcentajeCuotaFinal'"
                                         [placeholder]="'Ingrese el porcentaje'"
                                         step="0.10"
@@ -207,6 +208,7 @@
                                     class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4">
                                     <mat-label>Cuota final</mat-label>
                                     <input
+                                        type="number"
                                         matInput
                                         [formControlName]="'cuotaFinal'">
                                         <span matPrefix *ngIf="paymentForm.get('moneda').value === 'soles'">S/.</span>
@@ -240,6 +242,7 @@
                                     class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4">
                                     <mat-label>Financiamiento en cuotas</mat-label>
                                     <input
+                                        type="number"
                                         matInput
                                         [formControlName]="'financEnCuotas'">
                                         <span matPrefix *ngIf="paymentForm.get('moneda').value === 'soles'">S/.</span>
@@ -320,9 +323,27 @@
                                     class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4">
                                     <mat-label>Periodos de gracia</mat-label>
                                     <input
+                                    type="number"
                                         matInput
                                         [formControlName]="'periodosGracia'">
                                         <mat-error *ngIf="paymentForm.get('periodosGracia').hasError('required')">Ingrese la cantidad de periodos</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <!-- Descuento -->
+                    <div class="space-y-4 my-1">
+                        <ng-container >
+                            <div class="flex">
+                                <mat-form-field
+                                    class="flex-auto w-full">
+                                    <mat-label>Tasa de Descuento</mat-label>
+                                    <input
+                                        type="number"
+                                        matInput
+                                        [formControlName]="'tasaDescuento'">
+                                        <mat-error *ngIf="paymentForm.get('tasaDescuento').hasError('required')">Ingrese la tasa de descuento</mat-error>
                                 </mat-form-field>
                             </div>
                         </ng-container>
@@ -340,21 +361,20 @@
                             Cancelar
                         </button>
                         <!-- Simulate -->
-                        <button
+                        <!-- <button
                             class="ml-auto"
                             mat-button
                             [matTooltip]="'Simular plan'"
                             >
                             Simular
-                        </button>
+                        </button> -->
                         <!-- Create -->
                         <button
                             class="ml-2"
                             mat-flat-button
                             [color]="'primary'"
-                            [disabled]="paymentForm.invalid"
                             [matTooltip]="'Crear plan'"
-                            (click)="createPlan()"
+                            (click)="calculatePlan()"
                             >
                             Crear plan
                         </button>

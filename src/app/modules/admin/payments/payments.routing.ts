@@ -6,6 +6,7 @@ import { CanDeactivatePaymentsDetails } from 'app/modules/admin/payments/payment
 import { ClientsResolver } from '../clients/clients.resolvers';
 import { CatalogCarsResolver } from '../catalog/catalog.resolvers';
 import { PaymentsResolver } from './payments.resolver';
+import { PaymentsPlansComponent } from './plans/plans.component';
 
 export const paymentsRoutes: Route[] = [
   {
@@ -27,7 +28,12 @@ export const paymentsRoutes: Route[] = [
             canDeactivate: [CanDeactivatePaymentsDetails],
           },
         ]
-      }
+      },
+      {
+        path: 'plans/:id',
+        component: PaymentsPlansComponent,
+      },
     ]
   }
 ];
+

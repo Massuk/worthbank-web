@@ -1,77 +1,74 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    Inject,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation,
+} from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { ApiService } from 'app/service/api.service';
+
 @Component({
     selector: 'payments-list',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PaymentsListComponent implements OnInit{
-
-    @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
+export class PaymentsListComponent implements OnInit {
+    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    paymentsPlans$: any[] = []
     paymentsPlanCount: number = 0;
     drawerMode: 'side' | 'over';
+    
     searchInputControl: UntypedFormControl = new UntypedFormControl();
-    dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    dataSource: any[] = [];
+    mostrar: boolean = false
+
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     displayedColumns: string[] = [
+        'id',
         'name',
         'car',
         'price',
-        'van',
-        'tir',
-        'actions'
-      ];
-    
-    ngOnInit(): void {
-    }
+        'actions',
+    ];
+
     /**
      * Constructor
      */
     constructor(
-      private _activatedRoute: ActivatedRoute,
-      private _router: Router,
-      private _changeDetectorRef: ChangeDetectorRef,
+        private _activatedRoute: ActivatedRoute,
+        private _router: Router,
+        private _changeDetectorRef: ChangeDetectorRef,
+        private _ApiService: ApiService
+    ) {}
 
-  ) {
+    ngOnInit(): void {
+      this._ApiService.get().subscribe((response: any) => {
+        this.dataSource = response
+        this._changeDetectorRef.markForCheck();
+      })
     }
 
-        // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On backdrop clicked
-     */
-    onBackdropClicked(): void
-    {
-        // Go back to the list
-        this._router.navigate(['./'], {relativeTo: this._activatedRoute});
-
-        // Mark for check
+    onBackdropClicked(): void {
+        this._router.navigate(['./'], { relativeTo: this._activatedRoute });
         this._changeDetectorRef.markForCheck();
     }
 
-    filter(e: any) {
-        this.dataSource.filter = e.target.value.trim();
-      }
-    
-      clearFilter() {
-        this.dataSource.filter = '';
-      }
-
-          /**
+    /**
      * Create payment
      */
-    createPayment(): void
-    {
-            // Go to the new payment page
-            this._router.navigate(['details'], {relativeTo: this._activatedRoute});
-            this._changeDetectorRef.markForCheck();
+    createPayment(): void {
+        this._router.navigate(['details'], {
+            relativeTo: this._activatedRoute,
+        });
+        this._changeDetectorRef.markForCheck();
     }
 }

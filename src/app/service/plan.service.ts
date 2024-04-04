@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/envinronment';
+import { environment } from '../../environments/environment';
 import { Plan } from '../model/plan';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -22,7 +22,7 @@ export class PlanService {
   }
 
   // Función Read
-  read() {
+  read(): Observable<Plan[]> {
     return this.http.get<Plan[]>(this.url);
   }
 

@@ -25,12 +25,14 @@ import { PaymentsDetailsComponent } from 'app/modules/admin/payments/details/det
 import { PaymentsComponent } from 'app/modules/admin/payments/payments.component';
 import { WorthBankAlertModule } from '@worthbank/components/alert';
 import { CommonModule } from '@angular/common';
+import { PaymentsPlansComponent } from './plans/plans.component';
 
 @NgModule({
     declarations: [
         PaymentsComponent,
         PaymentsListComponent,
-        PaymentsDetailsComponent
+        PaymentsDetailsComponent,
+        PaymentsPlansComponent,
     ],
     imports     : [
         RouterModule.forChild(paymentsRoutes),
