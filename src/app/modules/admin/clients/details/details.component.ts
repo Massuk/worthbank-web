@@ -8,7 +8,7 @@ import { WorthBankConfirmationService } from '@worthbank/services/confirmation';
 import { Client, Country } from 'app/modules/admin/clients/clients.types';
 import { ClientsListComponent } from 'app/modules/admin/clients/list/list.component';
 import { ClientsService } from 'app/modules/admin/clients/clients.service';
-import { ClientCommunicationService } from '../shared.service';
+import { SharedClientsService } from '../shared.service';
 
 @Component({
     selector: 'clients-details',
@@ -19,6 +19,7 @@ import { ClientCommunicationService } from '../shared.service';
 export class ClientsDetailsComponent implements OnInit, OnDestroy {
     @ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
 
+    addEditable: boolean = false;
     editMode: boolean = false;
     client: Client;
     clientForm: UntypedFormGroup;
@@ -42,7 +43,7 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy {
         private _overlay: Overlay,
         private _eR: ElementRef,
         private _viewContainerRef: ViewContainerRef,
-        private _clientCommunicationService: ClientCommunicationService
+        private _clientCommunicationService: SharedClientsService
     ) {
     }
 
@@ -54,6 +55,14 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
+        this._clientCommunicationService.clientCreated$.subscribe(({ addEditable }) => {
+            this.addEditable = true;
+            if (this.addEditable === true){
+                this.toggleEditMode(true)
+            } else
+                console.log("No sirve")
+        });
+
         // Open the drawer
         this._clientsListComponent.matDrawer.open();
 
@@ -130,6 +139,9 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy {
                 });
 
                 // Toggle the edit mode off
+                if(this.addEditable === true){
+                    this.toggleEditMode(false);
+                } else
                 this.toggleEditMode(false);
 
                 // Mark for check
@@ -180,12 +192,9 @@ export class ClientsDetailsComponent implements OnInit, OnDestroy {
      * @param editMode
      */
     toggleEditMode(editMode: boolean | null = null): void {
-        if (editMode === null) {
-            this.editMode = !this.editMode;
-        }
-        else {
+
             this.editMode = editMode;
-        }
+        
 
         // Mark for check
         this._changeDetectorRef.markForCheck();
